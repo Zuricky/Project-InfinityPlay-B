@@ -33,7 +33,7 @@ Include funzionalità tipiche di uno store digitale e un'interfaccia moderna, re
 * 🛒 **Gestione Carrello & Checkout**
 * 💳 **Storico Ordini** nel profilo utente
 * ❤️ **Wishlist** per salvare i preferiti
-* 🗨️ **Recensioni Utenti** con stelle e commenti
+* ⭐ **Recensioni Utenti** con stelle e commenti
 
 ---
 
