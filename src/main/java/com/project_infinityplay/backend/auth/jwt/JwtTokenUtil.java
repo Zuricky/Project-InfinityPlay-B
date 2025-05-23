@@ -1,18 +1,19 @@
 package com.project_infinityplay.backend.auth.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenUtil {
@@ -23,50 +24,45 @@ public class JwtTokenUtil {
     @Value("${jwt.expiration}")
     private long jwtExpirationInMs;
 
-    // Estrae il nome utente dal token JWT
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    // Estrae la data di scadenza dal token JWT
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    // Estrae un claim specifico dal token JWT
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
 
-    // Estrae tutti i claims dal token JWT
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    // Verifica se il token JWT è scaduto
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
     // Genera un token JWT per l'utente, includendo i ruoli
-    public String generateToken(UserDetails userDetails) {
-        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-        List<String> roles = authorities.stream()
-                                        .map(GrantedAuthority::getAuthority)
-                                        .collect(Collectors.toList());
+    public JwtBuilder generateToken(UserDetails userDetails) {
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
-                .claim("roles", roles) // Aggiunge i ruoli come claim
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
-                .signWith(SignatureAlgorithm.HS256, secret)
-                .compact();
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256);
     }
 
     // Estrae i ruoli dal token JWT
