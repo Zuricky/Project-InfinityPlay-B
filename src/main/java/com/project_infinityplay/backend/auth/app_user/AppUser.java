@@ -21,6 +21,9 @@ public class AppUser implements UserDetails {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
@@ -45,11 +48,12 @@ public class AppUser implements UserDetails {
                 .collect(Collectors.toList());
     }
 
-    public AppUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        this(username, password, true, true, true, true, authorities);
+    public AppUser(String email, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        this(email, username, password, true, true, true, true, authorities);
     }
 
-    public AppUser(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
+    public AppUser(String email, String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
+        this.email = email;
         this.username = username;
         this.password = password;
         this.enabled = enabled;
