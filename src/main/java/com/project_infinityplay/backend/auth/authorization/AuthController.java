@@ -25,12 +25,14 @@ public class AuthController {
     public AppUser getCurrentUser(@AuthenticationPrincipal AppUser appUser) {
         return appUser;
     }
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
         appUserService.registerUser(
+                registerRequest.getEmail(),
                 registerRequest.getUsername(),
                 registerRequest.getPassword(),
-                Set.of(Role.ROLE_USER) // Assegna il ruolo di default
+                Set.of(Role.ROLE_USER)
         );
         return ResponseEntity.ok("Registrazione avvenuta con successo");
     }
@@ -38,10 +40,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         log.info("Login request:");
-        String token = appUserService.authenticateUser(
+        String token = String.valueOf(appUserService.authenticateUser(
                 loginRequest.getUsername(),
                 loginRequest.getPassword()
-        );
+        ));
         return ResponseEntity.ok(new AuthResponse(token));
     }
 }
