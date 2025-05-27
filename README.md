@@ -12,8 +12,8 @@
 
 ## 📖 Cos’è Project InfinityPlay?
 
-Project InfinityPlay è una piattaforma full‑stack per l’acquisto e la gestione di videogiochi, progettata per dimostrare competenze full stack con un’architettura pulita e professionale.
-Include funzionalità tipiche di uno store digitale e un'interfaccia moderna, responsive e sicura.
+Project InfinityPlay è una piattaforma full‑stack per l’esplorazione e gestione di videogiochi, progettata per mostrare un'architettura moderna e sicura.  
+Offre funzionalità social e interattive come wishlist e recensioni.
 
 ---
 
@@ -30,8 +30,6 @@ Include funzionalità tipiche di uno store digitale e un'interfaccia moderna, re
 * 🔒 **Autenticazione & Autorizzazione**
 * 📂 **Catalogo giochi** con ricerche e filtri avanzati
 * 📑 **Dettaglio prodotto** (descrizione, prezzo, immagini)
-* 🛒 **Gestione Carrello & Checkout**
-* 💳 **Storico Ordini** nel profilo utente
 * ❤️ **Wishlist** per salvare i preferiti
 * ⭐ **Recensioni Utenti** con stelle e commenti
 
@@ -56,6 +54,7 @@ Segui questi passaggi per eseguire il progetto in locale:
    DB_USER=user
    DB_PASS=password
    JWT_SECRET=secret
+   RAWG_API_KEY=rawg_api_key
    ```
 
 3. **Avvia il Back-end**
@@ -70,13 +69,13 @@ Segui questi passaggi per eseguire il progetto in locale:
    ```bash
    cd frontend
    npm install
-   npm start
+   npm run dev
    ```
 
 5. **Visita l’app**
 
-   * Front-end: `http://localhost:3000`
-   * Swagger UI: `http://localhost:8080/swagger-ui.html`
+   * Front-end: `http://localhost:5173`
+   * Back-end: `http://localhost:8080/`
 
 ---
 
@@ -84,16 +83,8 @@ Segui questi passaggi per eseguire il progetto in locale:
 
 * Registrati o effettua il login 🔑
 * Esplora il catalogo e applica filtri 🎲
-* Aggiungi giochi al carrello e procedi al checkout 🛒
-* Consulta lo storico ordini dal profilo 📂
 * Aggiungi ai preferiti tramite wishlist ❤️
 * Lascia una recensione per i titoli giocati ⭐
-
----
-
-## 🎁 Extra: PC Building 💻
-
-Resta sintonizzato per i **kit PC preassemblati** dedicati al gaming e allo streaming! 🔧
 
 ---
 
