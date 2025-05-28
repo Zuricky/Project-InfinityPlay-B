@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "games")
@@ -23,12 +23,15 @@ public class Game {
     @Column(length = 1000)
     private String description;
 
-    @NotNull
-    private BigDecimal price;
-
     @PastOrPresent
     private LocalDate releaseDate;
 
     @Column(name = "cover_url")
     private String coverUrl;
+
+    private double rating;
+
+    private int metacritic;
+
+    private List<String> platforms;
 }
