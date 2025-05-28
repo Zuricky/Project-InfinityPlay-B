@@ -39,10 +39,16 @@ public class RawgService {
                         .queryParamIfPresent("search", Optional.ofNullable(search))
                         .build())
                 .retrieve()
-                .onStatus(HttpStatusCode::isError,
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.empty())
+                .onStatus(HttpStatusCode::is5xxServerError,
                         clientResponse -> Mono.error(new ResponseStatusException(clientResponse.statusCode())))
                 .bodyToMono(RawgResponse.class)
                 .block();
+
+        if (resp == null || resp.getResults() == null) {
+            return List.of();
+        }
+
         return resp.getResults().stream()
                 .map(this::toEntity)
                 .collect(Collectors.toList());
@@ -67,13 +73,26 @@ public class RawgService {
         Game g = new Game();
         g.setId(dto.getId());
         g.setTitle(dto.getName());
-        g.setDescription("Description from RAWG");
+        g.setDescription(dto.getDescription());
         if (dto.getReleased() != null) {
             g.setReleaseDate(LocalDate.parse(dto.getReleased()));
         }
         g.setCoverUrl(dto.getBackgroundImage());
-        double price = 10 + Math.random() * 50;
-        g.setPrice(BigDecimal.valueOf(Math.round(price * 100) / 100.0));
+
+        if (dto.getRating() != null) {
+            g.setRating(dto.getRating());
+        }
+        if (dto.getMetacritic() != null) {
+            g.setMetacritic(dto.getMetacritic());
+        }
+
+        if (dto.getPlatforms() != null) {
+            List<String> platformNames = dto.getPlatforms().stream()
+                    .map(p -> p.getPlatform().getName())
+                    .toList();
+            g.setPlatforms(platformNames);
+        }
+
         return g;
     }
 }

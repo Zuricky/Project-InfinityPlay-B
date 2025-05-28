@@ -12,6 +12,7 @@ public class RawgGameDto {
     private String released;
     @JsonProperty("background_image")
     private String backgroundImage;
+    private String description;
     private Double rating;
     private Integer metacritic;
     private List<GenreDto> genres;
