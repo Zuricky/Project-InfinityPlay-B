@@ -1,6 +1,6 @@
 # 🎮 Project InfinityPlay ♾️
 
-[![Tech Stack](https://img.shields.io/badge/React-17.0.2-blue?logo=react\&logoColor=white)](https://reactjs.org/) [![Spring Boot](https://img.shields.io/badge/Spring--Boot-2.6.0-green?logo=spring\&logoColor=white)](https://spring.io/projects/spring-boot) [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13-316192?logo=postgresql\&logoColor=white)](https://www.postgresql.org/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Tech Stack](https://img.shields.io/badge/React-19.1.0-blue?logo=react\&logoColor=white)](https://reactjs.org/) [![Spring Boot](https://img.shields.io/badge/Spring--Boot-3.4.5-green?logo=spring\&logoColor=white)](https://spring.io/projects/spring-boot) [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13-316192?logo=postgresql\&logoColor=white)](https://www.postgresql.org/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
