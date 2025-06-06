@@ -21,22 +21,34 @@ import java.util.Set;
 public class AppUserService {
 
     @Autowired
-    private AppUserRepository appUserRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private AppUserRepository appUserRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public JwtBuilder authenticateUser(String username, String password) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+        );
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return jwtTokenUtil.generateToken(userDetails);
+    }
+
+    public String authenticateAndGetToken(String username, String password) {
+        JwtBuilder builder = authenticateUser(username, password);
+        return builder.compact();
+    }
+
     public AppUser registerUser(String email, String username, String password, Set<Role> roles) {
         if (appUserRepository.existsByUsername(username)) {
             throw new EntityExistsException("Username già in uso");
         }
-
         AppUser appUser = new AppUser();
         appUser.setEmail(email);
         appUser.setUsername(username);
@@ -49,25 +61,8 @@ public class AppUserService {
         return appUserRepository.findByUsername(username);
     }
 
-    public JwtBuilder authenticateUser(String username, String password)  {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
-            );
-
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return jwtTokenUtil.generateToken(userDetails);
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Username or password is incorrect", e);
-        }
-    }
-
-
-    public AppUser loadUserByUsername(String username)  {
-        AppUser appUser = appUserRepository.findByUsername(username)
-            .orElseThrow(() -> new EntityNotFoundException("Utente non trovato con username: " + username));
-
-
-        return appUser;
+    public AppUser loadUserByUsername(String username) {
+        return appUserRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with username: " + username));
     }
 }

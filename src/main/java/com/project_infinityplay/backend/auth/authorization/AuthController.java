@@ -20,12 +20,6 @@ public class AuthController {
 
     private final AppUserService appUserService;
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/current-user")
-    public AppUser getCurrentUser(@AuthenticationPrincipal AppUser appUser) {
-        return appUser;
-    }
-
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
         appUserService.registerUser(
@@ -34,16 +28,22 @@ public class AuthController {
                 registerRequest.getPassword(),
                 Set.of(Role.ROLE_USER)
         );
-        return ResponseEntity.ok("Registrazione avvenuta con successo");
+        return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         log.info("Login request:");
-        String token = String.valueOf(appUserService.authenticateUser(
+        String token = appUserService.authenticateAndGetToken(
                 loginRequest.getUsername(),
                 loginRequest.getPassword()
-        ));
+        );
         return ResponseEntity.ok(new AuthResponse(token));
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/current-user")
+    public AppUser getCurrentUser(@AuthenticationPrincipal AppUser appUser) {
+        return appUser;
     }
 }
